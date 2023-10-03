@@ -32,7 +32,9 @@ jobs:
         working-directory: ${{ github.workspace }}/Back
 
       - name: Publish
-        run: dotnet publish ./EntregaSegura.sln --configuration Release --no-build --output ${{ github.workspace }}/Back/publish
+        run: |
+          dotnet publish ./EntregaSegura.sln --configuration Release --no-build --output ${{ github.workspace }}/Back/publish
+          ls -R ${{ github.workspace }}/Back/publish  # List contents of the publish directory for troubleshooting
         working-directory: ${{ github.workspace }}/Back
 
   deploy:
@@ -43,9 +45,6 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     
     steps:
-      - name: List Files in Package Directory
-        run: ls -R ${{ github.workspace }}/Back/publish
-
       - name: Deployment
         uses: azure/webapps-deploy@v2
         with:
