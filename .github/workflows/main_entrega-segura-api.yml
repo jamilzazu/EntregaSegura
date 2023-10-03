@@ -15,23 +15,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '6.0.x'
 
       - name: Restore
         run: dotnet restore ./EntregaSegura.sln
         working-directory: ${{ github.workspace }}/Back
-        
+
       - name: Build
         run: dotnet build ./EntregaSegura.sln --configuration Release --no-restore
         working-directory: ${{ github.workspace }}/Back
-        
+
       - name: Publish
-        run: dotnet publish ./EntregaSegura.sln --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
+        run: dotnet publish ./EntregaSegura.sln --configuration Release --no-build --output ${{ github.workspace }}/Back/publish
         working-directory: ${{ github.workspace }}/Back
 
   deploy:
