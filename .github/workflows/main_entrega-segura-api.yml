@@ -34,24 +34,8 @@ jobs:
         run: dotnet publish ./EntregaSegura.sln --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
         working-directory: ${{ github.workspace }}/Back
 
-  migrations:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '6.0.x'
-
-      - name: Create EF Core Migrations
-        run: dotnet ef migrations add Initial --project ./Back/EntregaSegura.API/EntregaSegura.API.csproj --startup-project ./Back/EntregaSegura.API/EntregaSegura.API.csproj --configuration Release
-
-      - name: Apply EF Core Migrations
-        run: dotnet ef database update --project ./Back/EntregaSegura.API/EntregaSegura.API.csproj --startup-project ./Back/EntregaSegura.API/EntregaSegura.API.csproj --configuration Release
-
   deploy:
     runs-on: ubuntu-latest
-    needs: migrations
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
