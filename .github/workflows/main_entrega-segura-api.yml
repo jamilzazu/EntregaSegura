@@ -43,6 +43,9 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     
     steps:
+      - name: List Files in Package Directory
+        run: ls -R ${{ github.workspace }}/Back/publish
+
       - name: Deployment
         uses: azure/webapps-deploy@v2
         with:
